@@ -4,6 +4,7 @@ module.exports = {
     if (!isServer) {
       config.node = {
         fs: "empty",
+        dns: "empty",
       };
     }
 
