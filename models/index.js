@@ -3,7 +3,7 @@ import { SchemaComposer } from 'graphql-compose';
 import Workspace from './Workspace';
 
 
-const schemaComposer = new SchemaComposer();
+const schemaComposer = new SchemaComposer(); //todo: debug, potential memory leak accross lambda rebuilds
 
 const customizationOptions = {
     schemaComposer
