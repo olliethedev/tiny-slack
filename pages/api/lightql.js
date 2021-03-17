@@ -3,16 +3,18 @@ const { connect, promisify } = require("../../utils/database");
 import graphqlSchema from "../../models";
 
 export default async function handler(req, res) {
-  console.log(JSON.parse(req.body).query);
-  console.log(process.env.MONGO_DB_URL);
   try {
+
+    console.log(`Connected to ${process.env.MONGO_DB_URL}`);
     await connect(process.env.MONGO_DB_URL);
 
+    console.log(`Disconnected to ${process.env.MONGO_DB_URL}`);
+    await mongoose.disconnect();
     res.status(200).json({ data: "hello" });
-    // console.log(`Connected to ${process.env.MONGO_DB_URL}`);
     // try{
     //     const result = await promisify(graphql(graphqlSchema, JSON.parse(req.body).query));
     //     console.log("got result:"+result);
+    //     await mongoose.disconnect();
     //     res.status(200).json({ data: result });
     //     return {
     //         statusCode: 200,
