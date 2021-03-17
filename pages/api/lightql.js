@@ -28,5 +28,6 @@ export const config = {
         bodyParser: {
           sizeLimit: '1mb',
         },
+        externalResolver: true,
       },
   };
