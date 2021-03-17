@@ -1,5 +1,5 @@
 import { graphql } from "graphql";
-const { connect, promisify } = require("../../utils/database");
+const { connect, disconnect, promisify } = require("../../utils/database");
 import graphqlSchema from "../../models";
 
 export default async function handler(req, res) {
@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     await connect(process.env.MONGO_DB_URL);
 
     console.log(`Disconnected to ${process.env.MONGO_DB_URL}`);
-    await mongoose.disconnect();
+    await disconnect;
     res.status(200).json({ data: "hello" });
     // try{
     //     const result = await promisify(graphql(graphqlSchema, JSON.parse(req.body).query));
