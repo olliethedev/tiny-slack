@@ -9,7 +9,7 @@ export default function Home() {
     if (isSending) return;
     setData(false);
     setIsSending(true);
-    const resp = await fetch("/api/graphql",{
+    const resp = await fetch("/api/lightql",{
       method: 'POST',
       body:JSON.stringify({"query":"{workspaceMany{name}}"} )
     });

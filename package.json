@@ -21,10 +21,10 @@
   },
   "browser": {
     "apollo-server-micro": false,
-    "graphql":false,
-    "graphql-compose":false,
-    "graphql-compose-mongoose":false,
+    "graphql": false,
+    "graphql-compose": false,
+    "graphql-compose-mongoose": false,
     "mongoose": false,
-    "mongodb":false
+    "mongodb": false
   }
 }
