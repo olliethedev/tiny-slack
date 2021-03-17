@@ -5,6 +5,7 @@ import { connect, disconnect } from "../../utils/database";
 console.log("Loaded code");
 export default async function handler(req, res) {
   const apolloHandler = new ApolloServer({
+    introspection: true,
     playground: true,
     schema: graphqlSchema,
     context: async () => {
