@@ -7,7 +7,8 @@ const schemaComposer = new SchemaComposer();
 
 const customizationOptions = {
     schemaComposer
-}; 
+};
+
 const WorkspaceTC = composeMongoose(Workspace, customizationOptions);
 
 schemaComposer.Query.addFields({
