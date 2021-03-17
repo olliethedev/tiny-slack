@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     await connect(process.env.MONGO_DB_URL);
 
     console.log(`Disconnected to ${process.env.MONGO_DB_URL}`);
-    await disconnect;
+    await disconnect();
     res.status(200).json({ data: "hello" });
     // try{
     //     const result = await promisify(graphql(graphqlSchema, JSON.parse(req.body).query));
