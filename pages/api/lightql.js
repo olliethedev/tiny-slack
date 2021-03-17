@@ -12,6 +12,13 @@ export default async function handler(req, res) {
         const result = await promisify(graphql(graphqlSchema, JSON.parse(req.body).query));
         console.log("got result:"+result);
         res.status(200).json({ data: result });
+        return {
+            statusCode: 200,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ data: result }),
+          };
     }catch(err){
         console.log("got error")
         console.log(err);
