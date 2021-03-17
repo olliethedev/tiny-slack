@@ -1,6 +1,6 @@
 import { ApolloServer } from "apollo-server-micro";
 import graphqlSchema  from '../models';
-import { connect } from '../utils/database';
+import { connect } from './utils/database';
 
 export default new ApolloServer({ schema: graphqlSchema,
   context: async () => {
