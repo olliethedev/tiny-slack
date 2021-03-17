@@ -7,3 +7,9 @@ export const connect = (databaseUrl) => {
     useUnifiedTopology: true,
   });
 };
+export const promisify = (func) => new Promise((resolve, reject) => {
+  func.then(
+    resolve,
+    reject,
+  );
+})
