@@ -9,7 +9,10 @@ export default function Home() {
     if (isSending) return;
     setData(false);
     setIsSending(true);
-    const resp = await fetch("/api/hello");
+    const resp = await fetch("/api/graphql",{
+      method: 'POST',
+      body:JSON.stringify({"query":"{workspaceMany{name}}"} )
+    });
     const respJson = await resp.json();
     setData(respJson);
     setIsSending(false);
@@ -17,7 +20,7 @@ export default function Home() {
   return (
     <div className={styles.Home}>
       <Head>
-        <title>Create Next App</title>
+        <title>Tiny-Slack App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.title}>Home page</div>
