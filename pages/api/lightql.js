@@ -23,10 +23,24 @@ export default async function handler(req, res) {
         console.log("got error")
         console.log(err);
         res.status(500).json({ error: "GraphQL_Error" });
+        return {
+            statusCode: 500,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ error: "GraphQL_Error" }),
+          };
     }
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "DB_Error" });
+    return {
+        statusCode: 500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ error: "GraphQL_Error" }),
+      };
   }
 };
 
