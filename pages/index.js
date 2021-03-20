@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { useCallback, useState } from 'react'
+import { NavBar } from '../components/NavBar';
 import styles from '../styles/Home.module.scss'
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
         <title>Tiny-Slack App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <NavBar />
       <div className={styles.title}>Home page</div>
       <button disabled={isSending} onClick={sendRequest}>Call API</button>
       <br/>

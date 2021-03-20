@@ -18,6 +18,18 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Deploy locally with Netlify
+
+First, install `netlify` cli tool.
+
+Finally run the dev server with:
+
+```bash
+netlify dev
+```
+
+Your front end will be available on [http://localhost:8888/](http://localhost:8888/)
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
