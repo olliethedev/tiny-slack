@@ -7,7 +7,9 @@ export default async function handler(req, res) {
     await connect(process.env.MONGO_DB_URL);//IMPORTANT! always disconnect() or production serverless will stall
     console.log(`Connected to ${process.env.MONGO_DB_URL}`);
     try{
-        const result = await promisify(graphql(graphqlSchema, JSON.parse(req.body).query));
+        const {query, variables} = JSON.parse(req.body);
+        console.log({query, variables});
+        const result = await promisify(graphql(graphqlSchema, query, null, null, variables));
         await disconnect(); 
         res.status(200).json({ data: result });
     }catch(err){

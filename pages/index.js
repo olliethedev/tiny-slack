@@ -2,22 +2,10 @@ import Head from 'next/head'
 import { useCallback, useState } from 'react'
 import { NavBar } from '../components/NavBar';
 import styles from '../styles/Home.module.scss'
+import useGraphQL from '../utils/useGraphQL';
 
 export default function Home() {
-  const [isSending, setIsSending] = useState(false)
-  const [data, setData] = useState(false);
-  const sendRequest = useCallback(async () => {
-    if (isSending) return;
-    setData(false);
-    setIsSending(true);
-    const resp = await fetch("/api/lightql",{
-      method: 'POST',
-      body:JSON.stringify({"query":"{workspaceMany{name}}"} )
-    });
-    const respJson = await resp.json();
-    setData(respJson);
-    setIsSending(false);
-  }, [isSending]);
+  const [isSending, data, sendRequest] = useGraphQL("{workspaceMany{_id, name}}");
   return (
     <div className={styles.Home}>
       <Head>
