@@ -8,10 +8,11 @@ export default async function handler(req, res) {
     console.log(`Connected to ${process.env.MONGO_DB_URL}`);
     try{
         const {query, variables} = JSON.parse(req.body);
-        const user = req.body.user;
         console.log({query, variables});
-        console.log({user});
+        console.log(req);
         console.log({headers:req.headers});
+      console.log(req.netlifyFunctionParams);
+      console.log(req.context);
         const result = await promisify(graphql(graphqlSchema, query, null, null, variables));
         await disconnect(); 
         res.status(200).json({ data: result });
