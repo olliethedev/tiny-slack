@@ -1,10 +1,14 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useGraphQL from "../../utils/useGraphQL";
+import useNetlifyIdentity from '../../utils/useNetlifyIdentity';
 
 const Workspace = () => {
   const router = useRouter();
   const { id } = router.query;
+  const identity = useNetlifyIdentity(user => {
+    alert(JSON.stringify(user));
+  });
   if(!id){
       return <div>No id specified...</div>;
   }
@@ -24,7 +28,8 @@ const Workspace = () => {
           messages {created content user}
         }
       }`,
-      {"id":"60517bef789b0a591491bd94"}
+      {id},
+      identity.authedFetch
   );
   useEffect(() => {
     sendRequest("");

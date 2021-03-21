@@ -1,7 +1,9 @@
 import { useCallback, useState } from 'react';
 
 //query string example "{workspaceMany{_id, name}}"
-const useGraphQL = (query, variables)=>{
+const useGraphQL = (query, variables, fetchFunc)=>{
+    if(!fetchFunc)
+    fetchFunc = fetch;
     console.log({query, variables});
     const [isSending, setIsSending] = useState(false)
     const [data, setData] = useState(false);
@@ -9,7 +11,7 @@ const useGraphQL = (query, variables)=>{
       if (isSending) return;
       setData(false);
       setIsSending(true);
-      const resp = await fetch("/api/lightql",{
+      const resp = await fetchFunc("/api/lightql",{
         method: 'POST',
         body:JSON.stringify({query,variables})
       });

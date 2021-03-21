@@ -26,8 +26,8 @@ export const NavBar = () => {
   //   });
   // }, [loggedIn]);
 
-  const identity = useNetlifyIdentity(token => {
-    alert(token);
+  const identity = useNetlifyIdentity(user => {
+    alert(JSON.stringify(user));
   });
   return (
     <div>
