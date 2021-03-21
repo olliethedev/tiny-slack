@@ -1,6 +1,7 @@
 import { graphql } from "graphql";
 const { connect, disconnect, promisify } = require("../../utils/database");
 import graphqlSchema from "../../models";
+console.log(process.env.CONTEXT);
 
 export default async function handler(req, res) {
   try {
@@ -9,11 +10,7 @@ export default async function handler(req, res) {
     try{
         const {query, variables} = JSON.parse(req.body);
         console.log({query, variables});
-        console.log(req);
-        console.log({headers:req.headers});
-      console.log(req.netlifyFunctionParams);
-      console.log(req.netlifyFunctionParams?.context);
-      console.log(req.netlifyFunctionParams?.context?.clientContext);
+        console.log(req.netlifyFunctionParams?.context?.clientContext); //clientContext.user will contain user data if header Authorization token is valid. note: user.sub is the ID 
         const result = await promisify(graphql(graphqlSchema, query, null, null, variables));
         await disconnect(); 
         res.status(200).json({ data: result });
