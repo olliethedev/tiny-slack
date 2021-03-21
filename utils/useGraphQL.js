@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 //query string example "{workspaceMany{_id, name}}"
 const useGraphQL = (query, variables, fetchFunc)=>{
     if(!fetchFunc)
-    fetchFunc = fetch;
+      fetchFunc = fetch;
     console.log({query, variables});
     const [isSending, setIsSending] = useState(false)
     const [data, setData] = useState(false);

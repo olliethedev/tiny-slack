@@ -2,9 +2,13 @@ import Head from 'next/head'
 import { NavBar } from '../components/NavBar';
 import styles from '../styles/Home.module.scss'
 import useGraphQL from '../utils/useGraphQL';
+import useNetlifyIdentity from '../utils/useNetlifyIdentity';
 
 export default function Home() {
-  const [isSending, data, sendRequest] = useGraphQL("{workspaceMany{_id, name}}");
+  const identity = useNetlifyIdentity(user => {
+    alert(JSON.stringify(user));
+  });
+  const [isSending, data, sendRequest] = useGraphQL("{workspaceMany{_id, name}}", null, identity.authedFetch);
   return (
     <div className={styles.Home}>
       <Head>

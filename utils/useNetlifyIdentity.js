@@ -20,6 +20,7 @@ export default function useNetlifyIdentity(onAuthChange) {
     'netlifyUserIdentity',
     itemChangeCallback
   );
+  console.log(item)
   React.useEffect(() => {
     netlifyIdentity.on('login', setItem);
     netlifyIdentity.on('logout', removeItem);
@@ -27,13 +28,15 @@ export default function useNetlifyIdentity(onAuthChange) {
 
   // definition - `item` comes from  useNetlifyIdentity hook
   const genericAuthedFetch = (endpoint, obj = {}) => {
-    if (!item || !item.token || !item.token.access_token)
-      throw new Error('no user token found');
-    const defaultObj = {
-      headers: {
-        Authorization: 'Bearer ' + item.token.access_token
-      }
-    };
+      console.log(item);
+      const defaultObj = {
+        headers: {
+        }
+      };
+    if (item?.token.access_token){
+        defaultObj.headers.Authorization = 'Bearer ' + item.token.access_token;
+    }
+    
     const finalObj = Object.assign(defaultObj, obj);
     return fetch(endpoint, finalObj).then(res =>
       finalObj.headers['Content-Type'] === 'application/json' ? res.json() : res
