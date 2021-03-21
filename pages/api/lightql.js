@@ -13,6 +13,7 @@ export default async function handler(req, res) {
         console.log({headers:req.headers});
       console.log(req.netlifyFunctionParams);
       console.log(req.context);
+      console.log(req.context?.clientContext);
         const result = await promisify(graphql(graphqlSchema, query, null, null, variables));
         await disconnect(); 
         res.status(200).json({ data: result });
