@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import { useCallback, useState } from 'react'
 import { NavBar } from '../components/NavBar';
 import styles from '../styles/Home.module.scss'
 import useGraphQL from '../utils/useGraphQL';
