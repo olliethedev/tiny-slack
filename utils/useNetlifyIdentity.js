@@ -1,51 +1,35 @@
-import React from "react";
-
-
+import {useEffect, useContext} from "react";
 import netlifyIdentity from "netlify-identity-widget";
 import useLocalStorage  from "./useLocalStorage";
+import { ClientContext } from 'graphql-hooks'
 
 if (process.browser) {
     netlifyIdentity.init();
 }
 export default function useNetlifyIdentity(onAuthChange) {
-  if (!onAuthChange) throw new Error('onAuthChange cannot be falsy');
+  const graphQLContext = useContext(ClientContext);
   const itemChangeCallback = _user => {
     if (_user) {
-        onAuthChange(_user);
+      graphQLContext.setHeader('Authorization','Bearer ' + _user.token.access_token);
+        onAuthChange?.(_user);
     } else {
-      onAuthChange(null);
+      graphQLContext.removeHeader('Authorization');
+      onAuthChange?.(null);
     }
   };
   const [item, setItem, removeItem] = useLocalStorage(
     'netlifyUserIdentity',
     itemChangeCallback
   );
-  console.log(item)
-  React.useEffect(() => {
+
+  useEffect(() => {
     netlifyIdentity.on('login', setItem);
     netlifyIdentity.on('logout', removeItem);
   }, []);
 
-  // definition - `item` comes from  useNetlifyIdentity hook
-  const genericAuthedFetch = (endpoint, obj = {}) => {
-      console.log(item);
-      const defaultObj = {
-        headers: {
-        }
-      };
-    if (item?.token.access_token){
-        defaultObj.headers.Authorization = 'Bearer ' + item.token.access_token;
-    }
-    
-    const finalObj = Object.assign(defaultObj, obj);
-    return fetch(endpoint, finalObj).then(res =>
-      finalObj.headers['Content-Type'] === 'application/json' ? res.json() : res
-    );
-  };
   return {
     user: item,
     doLogout: () => netlifyIdentity.logout(),
-    doLogin: () => netlifyIdentity.open(),
-    authedFetch: genericAuthedFetch
+    doLogin: () => netlifyIdentity.open()
   };
 }

@@ -1,34 +1,7 @@
-import React, { useEffect, useState } from "react";
 import useNetlifyIdentity from '../utils/useNetlifyIdentity';
 
 export const NavBar = () => {
-  // let [loggedIn, setLoggedIn] = useState(netlifyAuth.isAuthenticated);
-  // let [user, setUser] = useState(netlifyAuth.user);
-  // console.log({loggedIn, user });
-  // let login = () => {
-  //   netlifyAuth.authenticate((user) => {
-  //     setLoggedIn(!!user);
-  //     setUser(user);
-  //     netlifyAuth.closeModal();
-  //   });
-  // };
-
-  // let logout = () => {
-  //   netlifyAuth.signout(() => {
-  //     setLoggedIn(false);
-  //     setUser(null);
-  //   });
-  // };
-  // useEffect(() => {
-  //   netlifyAuth.initialize((user) => {
-  //     setLoggedIn(!!user);
-  //     setUser(user);
-  //   });
-  // }, [loggedIn]);
-
-  const identity = useNetlifyIdentity(user => {
-    alert(JSON.stringify(user));
-  });
+  const identity = useNetlifyIdentity();
   return (
     <div>
       {identity.user ? (

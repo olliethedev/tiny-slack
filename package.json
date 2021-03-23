@@ -12,6 +12,7 @@
     "graphql": "^15.5.0",
     "graphql-compose": "^7.25.0",
     "graphql-compose-mongoose": "^9.1.0",
+    "graphql-hooks": "^5.1.1",
     "mongodb": "^3.6.5",
     "mongoose": "^5.12.0",
     "netlify-identity-widget": "^1.9.1",
