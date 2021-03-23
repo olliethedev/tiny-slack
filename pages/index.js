@@ -1,14 +1,11 @@
 import Head from "next/head";
-import { useManualQuery } from "graphql-hooks";
+import { Workspaces } from '../components/Workspaces';
 import styles from "../styles/Home.module.scss";
 import useNetlifyIdentity from "../utils/useNetlifyIdentity";
 
-// const HOMEPAGE_QUERY = `{
-//   workspaceMany{_id, name}
-// }`
+
 export default function Home() {
   const identity = useNetlifyIdentity();
-  // const [fetchUser, { loading, error, data }] = useManualQuery(HOMEPAGE_QUERY);
   return (
     <div className={styles.Home}>
       <Head>
@@ -17,7 +14,10 @@ export default function Home() {
       </Head>
       <div className={styles.title}>Tiny Slack</div>
       {identity.user ? (
-        <div>List</div>
+        <>
+          <div>{identity.user?.user_metadata?.full_name??identity.user.email}, pick your Workspace:</div>
+          <Workspaces/>
+        </>
       ) : (
         <>
           <h2 className={styles.subtitle}>Please login to continue</h2>

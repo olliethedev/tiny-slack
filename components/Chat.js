@@ -21,7 +21,7 @@ export const Chat = ({ id, user }) => {
   });
   return (
     <div>
-      {user?.user?.email}
+      {user?.user_metadata?.full_name??user?.email}
       {loading && <div>Loading</div>}
       {data && <div>{JSON.stringify(data)}</div>}
       {error && <div>Got error: {JSON.stringify(error)}</div>}

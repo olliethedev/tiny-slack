@@ -21,7 +21,7 @@ export default function useNetlifyIdentity(onAuthChange) {
     'netlifyUserIdentity',
     itemChangeCallback
   );
-
+  
   useEffect(() => {
     netlifyIdentity.on('login', setItem);
     netlifyIdentity.on('logout', removeItem);
