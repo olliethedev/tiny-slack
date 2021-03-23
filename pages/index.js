@@ -16,7 +16,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.title}>Tiny Slack</div>
-      {!identity.user ? (
+      {identity.user ? (
         <div>List</div>
       ) : (
         <>
