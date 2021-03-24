@@ -6,7 +6,6 @@ import useNetlifyIdentity from "../utils/useNetlifyIdentity";
 
 
 export default function Home({workspaces}) {
-  console.log(workspaces);
   const identity = useNetlifyIdentity();
   return (
     <div className={styles.Home}>

@@ -9,7 +9,6 @@ const Workspace = () => {
   const router = useRouter();
   const { id } = router.query;
   const identity = useNetlifyIdentity();
-  console.log({user:identity.user,id})
   useEffect(()=>{
     if(!identity.user) {
       router.push("/");
