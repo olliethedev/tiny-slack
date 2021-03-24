@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import {NavBar} from "./NavBar";
-import { useQuery } from "graphql-hooks";
-import { Channels } from './Channels';
-import { Messages } from './Messages';
+import React, { useEffect, useState } from "react";
+import { NavBar } from "./NavBar";
+import { useManualQuery } from "graphql-hooks";
+import { Channels } from "./Channels";
+import { Messages } from "./Messages";
 
 const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   workspaceOne(filter: { _id: $id }) {
@@ -16,25 +16,44 @@ const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   }
 }`;
 
-export const Chat = ({ id, user }) => {
+export const Chat = ({ id, user, initialWorkspace }) => {
+  const [workspace, setWorkspace] = useState(initialWorkspace);
   const [channel, setChannel] = useState();
-  const { loading, error, data } = useQuery(WORKSPACE_QUERY, {
-    variables: {
-      id,
-    },
-  });
+  const [update, { loading, error, data: updatedWorkspace }] = useManualQuery(
+    WORKSPACE_QUERY,
+    {
+      variables: {
+        id,
+      },
+    }
+  );
+
+  console.log({ workspace, initialWorkspace, updatedWorkspace });
+  useEffect(() => {
+    if (updatedWorkspace) {
+      setWorkspace(updatedWorkspace);
+      setChannel(updatedWorkspace.data.channelMany[0]);
+    }
+  }, [updatedWorkspace]);
   return (
     <div>
-      {user?.user_metadata?.full_name??user?.email}
-      {loading && <div>Loading</div>}
-      {data && <div>
-        <NavBar />
-        <div style={{display: 'flex'}}>
-          <Channels channels={data.data.channelMany} onSelect={setChannel} />
-          {channel&&<Messages messages={channel?.messages} />}
+      <span>{user?.user_metadata?.full_name ?? user?.email}</span>
+      
+      {workspace && (
+        <div>
+          <NavBar />
+          <button onClick={update}>Refresh channels</button>
+          {loading && <div>Loading latest</div>}
+          <div style={{ display: "flex" }}>
+            <Channels
+              channels={workspace.data.channelMany}
+              onSelect={setChannel}
+            />
+            {channel && <Messages messages={channel?.messages} />}
+          </div>
         </div>
-        </div>}
-      {error && <div>Got error: {JSON.stringify(error)}</div>}
+      )}
+      {error && <div>Got refreshing error: {JSON.stringify(error)}</div>}
     </div>
   );
 };
