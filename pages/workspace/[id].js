@@ -1,6 +1,6 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { Chat } from '../../components/Chat';
-import Link from "next/link";
 import useNetlifyIdentity from '../../utils/useNetlifyIdentity';
 import { useEffect } from 'react';
 
@@ -21,9 +21,14 @@ const Workspace = () => {
   }
   return (
     <div>
+      <Head>
+        <title>Tiny-Slack | Workspace</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       Workspace id: {id}
       {id && <Chat id={id} user={identity.user}/> }
     </div>
   );
 };
+
 export default Workspace;
