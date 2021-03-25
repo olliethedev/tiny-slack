@@ -16,6 +16,15 @@ const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   }
 }`;
 
+const MESSAGES_QUERY = `query FindMessages($id: MongoID!) {
+   messageMany(filter: { channel: $id }) {
+     _id
+     created
+     content
+     user
+   }
+}`
+
 export const Chat = ({ id, user, initialWorkspace }) => {
   const [workspace, setWorkspace] = useState(initialWorkspace);
   const [channel, setChannel] = useState();
