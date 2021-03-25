@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from './User';
 
 const WorkspaceSchema = new mongoose.Schema({
   name:  {

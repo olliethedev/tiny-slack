@@ -19,9 +19,8 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.statics.createIfNeededAndAddToWorkspace = async function createIfNeededAndAddToWorkspace(name, email, avatarUrl, workspaceId){
-  console.log("create if needed")
   let existingUser = await this.findOne({email});
-  console.log(existingUser)
+
   if(!existingUser) {
     existingUser = new User({name, email, avatarUrl});
     await existingUser.save();

@@ -8,11 +8,11 @@ const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   workspaceOne(filter: { _id: $id }) {
     _id
     name
+    users {name email}
   }
   channelMany(filter: { workspace: $id }) {
     _id
     name
-    messages {created content user}
   }
 }`;
 

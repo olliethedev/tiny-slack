@@ -17,21 +17,17 @@ const UserTC = composeMongoose(User, customizationOptions);
 const ChannelTC = composeMongoose(Channel, customizationOptions);
 const MessageTC = composeMongoose(Message, customizationOptions);
 
-//Add projections, aka inflate object references
-WorkspaceTC.addRelation("users", {
-  resolver: () => UserTC.mongooseResolvers.findMany(),
-  prepareArgs: {
-    filter: source => ({ _id:{in: source.users} })
-  },
-  projection: { _id:1, name: 1, email: 1 }, 
+//Fill in relationships, aka inflate object references
+WorkspaceTC.addRelation('users', {
+    resolver: () => UserTC.mongooseResolvers.findMany(),
+    prepareArgs: { filter: source => ({ _id: {$in:source.users} }),},
+    projection: { users: 1 }
 });
 
 MessageTC.addRelation("user", {
   resolver: () => UserTC.mongooseResolvers.findOne(),
-  prepareArgs: {
-    filter: (source) => ({_id : { in: source.user }})
-  },
-  projection: { _id:1, name: 1, email: 1, avatar_url: 1 },
+  prepareArgs: { filter: source => ({ _id: source.users }),},
+  projection: { users: 1 },
 });
 
 //Set GraphQL Queries from mongoose
