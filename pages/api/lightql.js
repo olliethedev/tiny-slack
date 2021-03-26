@@ -6,6 +6,7 @@ export default async function handler(req, res) {
     const { query, variables } = req.body; //JSON.parse(req.body);
     console.log(req.netlifyFunctionParams?.context?.clientContext); //clientContext.user will contain user data if header Authorization token is valid. note: user.sub is the ID
     const {data,error} = await executeQuery(query, variables);
+    console.log({data,error});
     if(data){
       res.status(200).json({ data });
     }else{

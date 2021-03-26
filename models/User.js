@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 import Workspace from "./Workspace";
+import { getConnection } from "./../utils/database";
 
-const UserSchema = new mongoose.Schema({
+const conn = getConnection();
+const Schema = mongoose.Schema;
+
+const UserSchema = new Schema({
   name:  {
     type: String,
     required: true,
@@ -27,5 +31,4 @@ UserSchema.statics.createIfNeededAndAddToWorkspace = async function createIfNeed
   }
   return await Workspace.findOneAndUpdate({_id:workspaceId},{ $addToSet: { users: existingUser._id } });
 }
-const User = mongoose.models.User || mongoose.model("User", UserSchema);
-export default User;
+export default conn.model("User", UserSchema);

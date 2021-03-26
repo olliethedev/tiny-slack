@@ -1,12 +1,16 @@
 import mongoose from "mongoose";
+import { getConnection } from "./../utils/database";
 
-const MessageSchema = new mongoose.Schema({
+const conn = getConnection();
+const Schema = mongoose.Schema;
+
+const MessageSchema = new Schema({
   created: {
     type: Date,
     default: Date.now,
   },
   channel: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Channel",
     required: true,
   },
@@ -15,11 +19,10 @@ const MessageSchema = new mongoose.Schema({
     required: true,
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
 });
 
-export default mongoose.models.Message ||
-  mongoose.model("Message", MessageSchema);
+export default conn.model("Message", MessageSchema);

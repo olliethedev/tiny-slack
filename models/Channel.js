@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
+import { getConnection } from "./../utils/database";
 
-const ChannelSchema = new mongoose.Schema({
+const conn = getConnection();
+const Schema = mongoose.Schema;
+
+const ChannelSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -10,7 +14,9 @@ const ChannelSchema = new mongoose.Schema({
     ref: "Workspace",
     required: true,
   },
-});
+})
 
-export default mongoose.models.Channel ||
-  mongoose.model("Channel", ChannelSchema);
+export default conn.model(
+  "Channel",
+  ChannelSchema
+);

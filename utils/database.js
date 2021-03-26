@@ -1,15 +1,32 @@
 import mongoose from "mongoose";
-
-export const connect = (databaseUrl) => {
-  return mongoose.connect(databaseUrl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+let connection;
+const connect = async (databaseUrl) => {
+  if(connection) {
+    return connection;
+  }
+  try {
+    console.log("creating connection");
+    connection = await mongoose.createConnection(databaseUrl, {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+      bufferCommands: false,
+      bufferMaxEntries: 0,
+    });
+    console.log("connected")
+    return connection;
+  } catch (e) {
+    console.error("Could not connect to MongoDB...");
+    throw e;
+  }
 };
-export const disconnect = () => mongoose.disconnect();
-export const promisify = (func) => new Promise((resolve, reject) => {
-  func.then(
-    resolve,
-    reject,
-  );
-})
+const disconnect = () => mongoose.disconnect();
+const getConnection = () => {
+  return connection;
+};
+const promisify = (func) =>
+  new Promise((resolve, reject) => {
+    func.then(resolve, reject);
+  });
+
+export { getConnection, connect, disconnect, promisify };
