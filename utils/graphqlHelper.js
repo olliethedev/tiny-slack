@@ -14,7 +14,7 @@ export const executeQuery = async(query,variables, context={}) =>{
     try {
         context.db = await connect(process.env.MONGO_DB_URL);
         out.data = await getGraphQL(query, variables, context);
-        if (process.env.CONTEXT !== "dev") { // netlify remote builds dont seem to keep the connection alive, 
+        if (process.env.CONTEXT !== "dev") { // netlify remote builds dont seem to keep the connection alive accross lambda calls 
             await disconnect();
         }
     } catch (err) {
