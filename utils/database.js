@@ -6,7 +6,7 @@ const connect = async (databaseUrl) => {
   }
   try {
     console.log("creating connection");
-    connection = await mongoose.createConnection(databaseUrl, {
+    connection = await mongoose.connect(databaseUrl, {
       useNewUrlParser: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
@@ -21,7 +21,7 @@ const connect = async (databaseUrl) => {
   }
 };
 const disconnect = async () => {
-  await connection?.close();
+  await mongoose.disconnect();
   connection = null;
   console.log("disconnected");
   return true;
