@@ -17,5 +17,9 @@ const WorkspaceSchema = new Schema({
     },
   ],
 });
+WorkspaceSchema.virtual('userCount').get(function() {
+  return this.users.length;
+});
+WorkspaceSchema.set("toJSON", { virtuals: true });
 const model = conn.model("Workspace", WorkspaceSchema)
 export default model;

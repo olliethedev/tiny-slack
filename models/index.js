@@ -48,6 +48,9 @@ const getSchema = async () => {
       projection: { user: 1 },
     });
 
+    //Add virtual functions
+    WorkspaceTC.addFields({userCount:"Int"})
+
     //Set GraphQL Queries from mongoose
     schemaComposer.Query.addFields({
       workspaceOne: WorkspaceTC.mongooseResolvers.findOne(),

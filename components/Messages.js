@@ -1,8 +1,7 @@
-import { useManualQuery, useQuery } from 'graphql-hooks';
+import { useManualQuery, useQuery } from "graphql-hooks";
 import React, { useCallback, useEffect } from "react";
-import useInput from '../utils/useInput';
-import useNetlifyIdentity from '../utils/useNetlifyIdentity';
-
+import useInput from "../utils/useInput";
+import useNetlifyIdentity from "../utils/useNetlifyIdentity";
 
 const MESSAGES_QUERY = `query FindMessages($id: MongoID!) {
   messageMany(filter: { channel: $id }) {
@@ -24,26 +23,37 @@ const NEW_MESSAGE_MUTATION = `mutation NewMessage($content: String!, $user: Mong
 }`;
 
 export const Messages = ({ name, channelId }) => {
-    const [ messageInput, message, setMessage] = useInput({elementTypeTextArea:true});
-    const [createNewMessage, { loading: loadingNewMessage, error:newMessageError, data: newMessage }] = useManualQuery(NEW_MESSAGE_MUTATION);
-    const [updateMessages, { loading, error, data: messages }] = useManualQuery(
-      MESSAGES_QUERY,
-      {
-        variables: {
-          id:channelId,
-        },
-      }
-    );
-    const handleSend = useCallback(()=>{
-        alert(message);
-        createNewMessage({variables:{channel:channelId, content:message, user:"605c1917ea999b604fb9f86b"}})
-        setMessage("");
-    }, [message]);
-    useEffect(()=>{
-      updateMessages();
-      console.log({messages})
-    }, [newMessage, channelId]);
-    console.log({channelId, messages});
+  const [messageInput, message, setMessage] = useInput({
+    elementTypeTextArea: true,
+  });
+  const [
+    createNewMessage,
+    { loading: loadingNewMessage, error: newMessageError, data: newMessage },
+  ] = useManualQuery(NEW_MESSAGE_MUTATION);
+  const [updateMessages, { loading, error, data: messages }] = useManualQuery(
+    MESSAGES_QUERY,
+    {
+      variables: {
+        id: channelId,
+      },
+    }
+  );
+  const handleSend = useCallback(() => {
+    alert(message);
+    createNewMessage({
+      variables: {
+        channel: channelId,
+        content: message,
+        user: "605c1917ea999b604fb9f86b",
+      },
+    });
+    setMessage("");
+  }, [message]);
+  useEffect(() => {
+    updateMessages();
+    console.log({ messages });
+  }, [newMessage, channelId]);
+  console.log({ channelId, messages });
   return (
     <div>
       <h3>{name} Messages</h3>

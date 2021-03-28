@@ -10,6 +10,7 @@ const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   workspaceOne(filter: { _id: $id }) {
     _id
     name
+    userCount
     users {name email}
   }
   channelMany(filter: { workspace: $id }) {
@@ -63,6 +64,7 @@ const Workspace = ({ workspace }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       Workspace id: {id}
+      Users: {workspace.data.workspaceOne.userCount}
       {loading&& <div>Registering new user...</div>}
       {(error||updatedWorkspace?.errors)&&<div>Failed registration...</div>}
       {updatedWorkspace&&<div>Registered!!!</div>}
@@ -74,7 +76,7 @@ const Workspace = ({ workspace }) => {
 export default Workspace;
 
 // this function is called serverside, and client side gets the `workspaces` prop
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params}) {
   const { data } = await executeQuery(WORKSPACE_QUERY, { id: params.id });
   return { props: { workspace: data } };
 }
