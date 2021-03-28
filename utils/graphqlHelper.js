@@ -4,6 +4,7 @@ import getSchema from "../models";
 
 export const getGraphQL = async(query, variables, context) =>{
     const graphqlSchema = await getSchema();
+    console.log("got schema");
     return promisify(graphql(graphqlSchema, query, null, context, variables));
 }
 
