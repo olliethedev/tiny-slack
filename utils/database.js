@@ -21,8 +21,9 @@ const connect = async (databaseUrl) => {
   }
 };
 const disconnect = async () => {
-  await connection.disconnect();
+  await mongoose.disconnect();
   connection = null;
+  console.log("disconnected");
   return true;
 }
 const getConnection = () => {
