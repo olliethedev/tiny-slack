@@ -20,7 +20,11 @@ const connect = async (databaseUrl) => {
     throw e;
   }
 };
-const disconnect = () => mongoose.disconnect();
+const disconnect = async () => {
+  await connection.disconnect();
+  connection = null;
+  return true;
+}
 const getConnection = () => {
   return connection;
 };
