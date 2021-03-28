@@ -4,7 +4,7 @@ export default function useInput(
   {initialValue = "",
   type = "text",
   placeholder = "",
-  elementTypeTextArea = false}
+  elementTypeTextArea = false}={}
 ) {
   const [value, setValue] = useState(initialValue);
   const ElementType = elementTypeTextArea ? "textarea" : "input";

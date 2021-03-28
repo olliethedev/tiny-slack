@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Chat } from "../../components/Chat";
+import dynamic from 'next/dynamic'
 import useNetlifyIdentity from "../../utils/useNetlifyIdentity";
 import { useEffect } from "react";
 import { executeQuery } from "../../utils/graphqlHelper";
@@ -24,6 +24,8 @@ const WORKSPACE_JOIN_MUTATION = `mutation JoinWorkspace($name: String!, $email: 
     users {name email _id}
   }
 }`;
+
+const Chat = dynamic(() => import('../../components/Chat'));
 
 const Workspace = ({ workspace }) => {
   const router = useRouter();

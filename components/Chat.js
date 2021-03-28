@@ -16,16 +16,7 @@ const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   }
 }`;
 
-const MESSAGES_QUERY = `query FindMessages($id: MongoID!) {
-   messageMany(filter: { channel: $id }) {
-     _id
-     created
-     content
-     user
-   }
-}`
-
-export const Chat = ({ id, user, initialWorkspace }) => {
+ const Chat = ({ id, user, initialWorkspace }) => {
   const [workspace, setWorkspace] = useState(initialWorkspace);
   const [channel, setChannel] = useState();
   const [update, { loading, error, data: updatedWorkspace }] = useManualQuery(
@@ -55,10 +46,12 @@ export const Chat = ({ id, user, initialWorkspace }) => {
           {loading && <div>Loading latest</div>}
           <div style={{ display: "flex" }}>
             <Channels
+              workspaceId={workspace.data.workspaceOne._id}
               channels={workspace.data.channelMany}
               onSelect={setChannel}
+              onNewChannel={update}
             />
-            {channel && <Messages messages={channel?.messages} />}
+            {channel && <Messages name={channel.name} channelId={channel._id} />}
           </div>
         </div>
       )}
@@ -66,3 +59,4 @@ export const Chat = ({ id, user, initialWorkspace }) => {
     </div>
   );
 };
+export default Chat;

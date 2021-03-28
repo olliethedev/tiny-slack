@@ -3,6 +3,21 @@ import { SchemaComposer } from "graphql-compose";
 
 let schema;
 
+function adminAccess(resolvers) {
+  Object.keys(resolvers).forEach((k) => {
+    resolvers[k] = resolvers[k].wrapResolve((next) => async (rp) => {
+      // extend resolve params with hook
+      rp.beforeRecordMutate = async function (doc, rp) {
+        console.log(rp);
+        return doc;
+      };
+
+      return next(rp);
+    });
+  });
+  return resolvers;
+}
+
 const getSchema = async () => {
   //make sure mongo connection is initialized before using the models
   const Workspace = require("./Workspace").default;
@@ -29,8 +44,8 @@ const getSchema = async () => {
 
     MessageTC.addRelation("user", {
       resolver: () => UserTC.mongooseResolvers.findOne(),
-      prepareArgs: { filter: (source) => ({ _id: source.users }) },
-      projection: { users: 1 },
+      prepareArgs: { filter: (source) => ({ _id: source.user }) },
+      projection: { user: 1 },
     });
 
     //Set GraphQL Queries from mongoose
@@ -68,7 +83,9 @@ const getSchema = async () => {
       workspaceCreateOne: WorkspaceTC.mongooseResolvers.createOne(),
       userCreateOne: createUserInNotExistAndPushToWorkspace,
       channelCreateOne: ChannelTC.mongooseResolvers.createOne(),
-      messageCreateOne: MessageTC.mongooseResolvers.createOne(),
+      ...adminAccess({
+        messageCreateOne: MessageTC.mongooseResolvers.createOne(),
+      }),
     });
     schema = schemaComposer.buildSchema();
   }
