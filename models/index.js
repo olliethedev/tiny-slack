@@ -21,7 +21,7 @@ const getSchema = async () => {
   const User = require("./User").default;
   const Channel = require("./Channel").default;
   const Message = require("./Message").default;
-  if (!schema) {
+  if (!schema || process.env.CONTEXT !== "dev") { // dont cache schema on remote build 
     const schemaComposer = new SchemaComposer();
     const customizationOptions = {
       schemaComposer,
