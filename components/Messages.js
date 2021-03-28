@@ -11,18 +11,17 @@ const MESSAGES_QUERY = `query FindMessages($id: MongoID!) {
     user {name email}
   }
 }`;
-const NEW_MESSAGE_MUTATION = `mutation NewMessage($content: String!, $user: MongoID!, $channel: MongoID!) {
-  messageCreateOne( record: {content: $content, user:$user, channel:$channel}){
-    record {
-      _id
-      content
-      created
-      user {name email}
-    }
+const NEW_MESSAGE_MUTATION = `mutation NewMessage($content: String!, $email: String!, $channelId: MongoID!) {
+  messageCreateOne( content: $content, email: $email, channelId: $channelId){
+    _id
+    content
+    created
+    user {name email}
   }
 }`;
 
 export const Messages = ({ name, channelId }) => {
+  const identity = useNetlifyIdentity();
   const [messageInput, message, setMessage] = useInput({
     elementTypeTextArea: true,
   });
@@ -42,9 +41,9 @@ export const Messages = ({ name, channelId }) => {
     alert(message);
     createNewMessage({
       variables: {
-        channel: channelId,
+        channelId,
         content: message,
-        user: "605c1917ea999b604fb9f86b",
+        email: identity.user.email,
       },
     });
     setMessage("");
@@ -57,6 +56,8 @@ export const Messages = ({ name, channelId }) => {
   return (
     <div>
       <h3>{name} Messages</h3>
+      {loading&&<div>Loading...</div>}
+      {error&&<div>Error loading messages...</div>}
       {messages?.data.messageMany.map((message, index) => (
         <div key={index}>{message.content}</div>
       ))}

@@ -7,13 +7,12 @@ export const getGraphQL = async(query, variables, context) =>{
     return promisify(graphql(graphqlSchema, query, null, context, variables));
 }
 
-export const executeQuery = async(query,variables) =>{
+export const executeQuery = async(query,variables, context={}) =>{
     console.log({ query, variables });
     const out = {data:null, error: false};
     try {
-        const db = await connect(process.env.MONGO_DB_URL);
-        out.data = await getGraphQL(query, variables, {db});
-        console.log({data:out.data});
+        context.db = await connect(process.env.MONGO_DB_URL);
+        out.data = await getGraphQL(query, variables, context);
     } catch (err) {
         out.error = err;
     }

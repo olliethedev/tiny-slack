@@ -26,7 +26,7 @@ UserSchema.statics.createIfNeededAndAddToWorkspace = async function createIfNeed
   let existingUser = await this.findOne({email});
 
   if(!existingUser) {
-    existingUser = new User({name, email, avatarUrl});
+    existingUser = new this({name, email, avatarUrl});
     await existingUser.save();
   }
   return await Workspace.findOneAndUpdate({_id:workspaceId},{ $addToSet: { users: existingUser._id } });

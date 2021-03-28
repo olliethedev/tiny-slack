@@ -3,20 +3,17 @@ import { SchemaComposer } from "graphql-compose";
 
 let schema;
 
-function adminAccess(resolvers) {
-  Object.keys(resolvers).forEach((k) => {
-    resolvers[k] = resolvers[k].wrapResolve((next) => async (rp) => {
-      // extend resolve params with hook
-      rp.beforeRecordMutate = async function (doc, rp) {
-        console.log(rp);
-        return doc;
-      };
-
-      return next(rp);
-    });
+const manualAdminCheck = (context) =>
+  new Promise((resolve, reject) => {
+    console.log({ clientContext: context.clientContext });
+    if (process.env.CONTEXT === "dev") {
+      // skip authentication on for local dev
+      resolve();
+    } else {
+      //todo: check email of
+      resolve();
+    }
   });
-  return resolvers;
-}
 
 const getSchema = async () => {
   //make sure mongo connection is initialized before using the models
@@ -25,7 +22,7 @@ const getSchema = async () => {
   const Channel = require("./Channel").default;
   const Message = require("./Message").default;
   if (!schema) {
-    const schemaComposer = new SchemaComposer(); //todo: debug, potential memory leak accross lambda rebuilds
+    const schemaComposer = new SchemaComposer();
     const customizationOptions = {
       schemaComposer,
     };
@@ -49,7 +46,7 @@ const getSchema = async () => {
     });
 
     //Add virtual functions
-    WorkspaceTC.addFields({userCount:"Int"})
+    WorkspaceTC.addFields({ userCount: "Int" });
 
     //Set GraphQL Queries from mongoose
     schemaComposer.Query.addFields({
@@ -62,7 +59,7 @@ const getSchema = async () => {
     });
 
     //GraphQL Custom Mutations
-    const createUserInNotExistAndPushToWorkspace = {
+    const userCreateOne = {
       type: WorkspaceTC,
       args: {
         workspaceId: "MongoID!",
@@ -70,25 +67,36 @@ const getSchema = async () => {
         email: "String!",
         avatar_url: "String",
       },
-      resolve: async (source, args, context, info) => {
-        console.log(args);
-        return User.createIfNeededAndAddToWorkspace(
-          args.name,
-          args.email,
-          args.avatar_url,
-          args.workspaceId
-        );
+      resolve: async (source, args, context, info) =>
+        manualAdminCheck(context, args.email).then(() =>
+          User.createIfNeededAndAddToWorkspace(
+            args.name,
+            args.email,
+            args.avatar_url,
+            args.workspaceId
+          )
+        ),
+    };
+
+    const messageCreateOne = {
+      type: MessageTC,
+      args: {
+        channelId: "MongoID!",
+        content: "String!",
+        email: "String!",
       },
+      resolve: async (source, args, context, info) =>
+        manualAdminCheck(context, args.email).then(() =>
+          Message.createWithUserEmail(args.channelId, args.content, args.email)
+        ),
     };
 
     //Set GraphQL Mutations from mongoose
     schemaComposer.Mutation.addFields({
       workspaceCreateOne: WorkspaceTC.mongooseResolvers.createOne(),
-      userCreateOne: createUserInNotExistAndPushToWorkspace,
+      userCreateOne,
       channelCreateOne: ChannelTC.mongooseResolvers.createOne(),
-      ...adminAccess({
-        messageCreateOne: MessageTC.mongooseResolvers.createOne(),
-      }),
+      messageCreateOne,
     });
     schema = schemaComposer.buildSchema();
   }
