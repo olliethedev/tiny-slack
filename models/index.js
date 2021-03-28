@@ -3,15 +3,16 @@ import { SchemaComposer } from "graphql-compose";
 
 let schema;
 
-const manualAdminCheck = (context) =>
+const manualAdminCheck = (context, email) =>
   new Promise((resolve, reject) => {
     console.log({ clientContext: context.clientContext });
-    if (process.env.CONTEXT === "dev") {
-      // skip authentication on for local dev
+    if (process.env.CONTEXT === "dev") { // skip authentication on for local dev
       resolve();
     } else {
-      //todo: check email of
-      resolve();
+      if(context.clientContext.user.email===email)
+        resolve();
+      else
+        reject("Authentication failed!");
     }
   });
 
