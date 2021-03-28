@@ -1,5 +1,5 @@
 import { graphql } from "graphql";
-const { connect, promisify } = require("./database");
+const { connect, disconnect, promisify } = require("./database");
 import getSchema from "../models";
 
 export const getGraphQL = async(query, variables, context) =>{
@@ -14,6 +14,9 @@ export const executeQuery = async(query,variables, context={}) =>{
     try {
         context.db = await connect(process.env.MONGO_DB_URL);
         out.data = await getGraphQL(query, variables, context);
+        if (process.env.CONTEXT !== "dev") {
+            await disconnect();
+        }
     } catch (err) {
         out.error = err;
     }
