@@ -35,7 +35,5 @@ export async function getServerSideProps({ params }) {
     workspaceMany{_id, name}
   }`;
   const {data}= await executeQuery(HOMEPAGE_QUERY);
-  console.log("Got ServerSideProps:");
-  console.log(JSON.stringify(data))
   return { props: { workspaces: data?.data?.workspaceMany ?? [] } }
 }

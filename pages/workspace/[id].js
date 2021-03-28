@@ -78,6 +78,5 @@ export default Workspace;
 // this function is called serverside, and client side gets the `workspaces` prop
 export async function getServerSideProps({ params}) {
   const { data } = await executeQuery(WORKSPACE_QUERY, { id: params.id });
-  console.log("Got ServerSideProps")
   return { props: { workspace: data } };
 }

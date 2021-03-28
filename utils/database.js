@@ -1,19 +1,23 @@
 import mongoose from "mongoose";
 let connection;
 const connect = async (databaseUrl) => {
-  if(connection) {
+  if (connection) {
     return connection;
   }
   try {
     console.log("creating connection");
-    connection = await mongoose.connect(databaseUrl, {
+    const connectionSettings = {
       useNewUrlParser: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
       bufferCommands: false,
       bufferMaxEntries: 0,
-    });
-    console.log("connected")
+    };
+    // reuse connection instance for local development convinience
+    connection = await (process.env.CONTEXT !== "dev"
+      ? mongoose.connect(databaseUrl, connectionSettings)
+      : mongoose.createConnection(databaseUrl, connectionSettings));
+    console.log("connected");
     return connection;
   } catch (e) {
     console.error("Could not connect to MongoDB...");
@@ -25,7 +29,7 @@ const disconnect = async () => {
   connection = null;
   console.log("disconnected");
   return true;
-}
+};
 const getConnection = () => {
   return connection;
 };
