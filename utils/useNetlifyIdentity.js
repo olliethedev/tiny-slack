@@ -6,6 +6,9 @@ import { ClientContext } from 'graphql-hooks'
 if (process.browser) {
     netlifyIdentity.init();
 }
+
+//Utility hook specifically for working with Netlify Identity
+//Aditionally sets Authorization headers for our graphQLContext. Should probably not live here.
 export default function useNetlifyIdentity(onAuthChange) {
   const graphQLContext = useContext(ClientContext);
   const itemChangeCallback = _user => {

@@ -1,5 +1,7 @@
 import { executeQuery } from "../../utils/graphqlHelper";
 
+// This is the entry point for all our api calls. Can be accessed at /api/graphql
+// Correct graphql query will have query and variables fields in the request body.
 export default async function handler(req, res) {
 
     const { query, variables } = req.body; //JSON.parse(req.body);

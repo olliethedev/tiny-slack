@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+// Utility hook for stateful inputs and textarea elements.
 export default function useInput(
   {initialValue = "",
   type = "text",

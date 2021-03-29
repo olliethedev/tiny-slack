@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 let connection;
+//creates and caches the database connection
 const connect = async (databaseUrl) => {
   if (connection) {
     return connection;
@@ -24,15 +25,20 @@ const connect = async (databaseUrl) => {
     throw e;
   }
 };
+
+//Disconnects from database
 const disconnect = async () => {
   await mongoose.disconnect();
   connection = null;
   console.log("disconnected");
   return true;
 };
+
 const getConnection = () => {
   return connection;
 };
+
+//Utility function for promisifying mongo functions that dont return a promise
 const promisify = (func) =>
   new Promise((resolve, reject) => {
     func.then(resolve, reject);

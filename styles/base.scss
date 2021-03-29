@@ -1,0 +1,421 @@
+// https://neumorphism.io/#313131
+
+//colors
+$bg-color-middle: #eef0f1;
+$bg-color: lighten($bg-color-middle, 10%);
+$bg-color-dark: darken($bg-color-middle, 3%);
+$font-color: #5c5c64;
+$font-color-light: lighten($font-color, 15%);
+$gradient-start-color: #70e0b5;
+$gradient-end-color: #55b3b9;
+$accent-gradient: linear-gradient(
+  to right,
+  $gradient-start-color,
+  $gradient-end-color 40%
+);
+$accent-gradient-red: linear-gradient(to right, #ec4747, #c22525 40%);
+$font-size-small: 12px;
+$font-size-normal: 16px;
+$font-size-large: 24px;
+$font-size-xl: 46px;
+//sizes
+$space-tiny: 8px;
+$space-small: 16px;
+$space-normal: 32px;
+$space-large: 64px;
+$radius-tiny: 8px;
+$radius-small: 16px;
+$radius-normal: 25px;
+$radius-large: 30px;
+$nav-width: 140px;
+$stats-width: 300px;
+//shadows
+$box-shadow-high: -4px -4px 8px rgba(255, 255, 255, 0.8),
+  4px 4px 8px rgba(0, 0, 0, 0.15);
+$box-shadow-normal: -2px -2px 7px rgba(255, 255, 255, 0.8),
+  2px 2px 6px rgba(0, 0, 0, 0.15);
+$box-shadow-small: 0px -1px 3px rgb(255, 255, 255),
+  0px 1px 3px rgba(0, 0, 0, 0.15);
+$box-shadow-normal-inverse: inset -2px -2px 2px rgb(255, 255, 255),
+  inset 1px 1px 3px rgba(0, 0, 0, 0.3);
+$box-shadow-high-inverse: inset 4px 4px 8px rgba(0, 0, 0, 0.15),
+  inset -4px -4px 8px rgba(255, 255, 255, 1);
+
+$box-shadow-accent: -2px -2px 7px rgba($gradient-start-color, 0.8),
+  2px 2px 6px rgba($gradient-end-color, 0.7);
+$box-shadow-accent-small: 0px -1px 3px rgba($gradient-start-color, 0.95),
+  0px 1px 3px rgba($gradient-end-color, 0.95);
+
+//backgrounds
+$background-gradient: linear-gradient(135deg, $bg-color-dark, $bg-color-middle);
+%double-dashed-lines {
+  background: repeating-linear-gradient(
+      to bottom,
+      $bg-color-middle 0,
+      $bg-color-middle 3px,
+      transparent 3px,
+      transparent 10px
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      transparent calc(93% - 0.81px),
+      $font-color-light calc(93% - 0.8px),
+      $font-color-light calc(93% + 0.8px),
+      transparent calc(93% + 0.9px),
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      transparent calc(7% - 0.9px),
+      $font-color-light calc(7% - 0.9px),
+      $font-color-light calc(7% + 0.9px),
+      transparent calc(7% + 0.9px),
+      transparent 100%
+    ),
+    linear-gradient(to bottom, $bg-color-middle, $bg-color-middle);
+  background-repeat: space;
+}
+
+//misc
+$common-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+//classes
+
+//MOBILE
+@mixin mobile {
+  @media only screen and (max-width: 680px) {
+    @content;
+  }
+}
+
+%common-page {
+  margin: 0 auto;
+  padding-top: $space-normal;
+  padding-bottom: $space-normal;
+  max-width: 900px;
+  min-width: 420px;
+  height: 100vh;
+  @include mobile {
+    padding: $space-normal $space-small 0 $space-small;
+    min-width: 100%;
+  }
+}
+
+%common-content {
+  padding: $space-normal $space-normal;
+  width: 100%;
+  height: 100%;
+  min-width: 360px;
+  @include mobile {
+    padding: $space-tiny 0px $space-large 0px;
+    min-width: 100%;
+  }
+}
+
+%common-container-small {
+  width: min-content;
+  padding: $space-small;
+  color: $font-color;
+  border-radius: $radius-small;
+  background: $background-gradient;
+  transition: all 200ms $common-timing-function;
+  box-shadow: $box-shadow-small;
+}
+%common-accent-container {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.089);
+  font-size: 24px;
+  color: #f2f2f2;
+  background-image: $accent-gradient;
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.15),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.1);
+}
+%common-container {
+  width: min-content;
+  padding: $space-small;
+  color: $font-color;
+  border-radius: $radius-large;
+  background: $background-gradient;
+  transition: all 200ms $common-timing-function;
+  box-shadow: $box-shadow-high;
+}
+%common-button {
+  @extend %common-container;
+  display: flex;
+  align-items: center;
+  box-shadow: $box-shadow-normal;
+  padding: 10px 20px;
+  border-radius: $radius-large;
+  font-weight: 500;
+  font-style: normal;
+  font-size: $font-size-normal;
+  white-space: nowrap;
+  cursor: pointer;
+  &:after {
+    content: "";
+  }
+  &:active {
+    transform: scale(0.95);
+    box-shadow: $box-shadow-small;
+  }
+}
+%common-button-secondary {
+  @extend %common-container;
+  box-shadow: inset 0px 0px 0px rgba(255, 255, 255, 1),
+    inset 0px 0px 0px rgba(0, 0, 0, 0.15);
+  padding: 10px 20px;
+  border-radius: $radius-large;
+  font-weight: 300;
+  font-style: normal;
+  font-size: $font-size-normal;
+  transition: all 200ms ease-in-out;
+  background-color: transparent;
+  background-image: none;
+  white-space: nowrap;
+  cursor: pointer;
+  &:after {
+    content: "";
+  }
+  &:active {
+    //font-weight: 500;
+    transform: scale(1);
+    box-shadow: $box-shadow-normal-inverse;
+  }
+}
+%common-button-accent {
+  @extend %common-button;
+  @extend %common-heading-banner-normal;
+  background-image: $accent-gradient;
+  display: flex;
+  align-items: center;
+  box-shadow: $box-shadow-accent;
+  padding: 10px 20px;
+  border-radius: $radius-large;
+  font-weight: 500;
+  font-style: normal;
+  color: white;
+  white-space: nowrap;
+  cursor: pointer;
+  &:after {
+    content: "";
+  }
+  &:active {
+    transform: scale(0.95);
+    box-shadow: $box-shadow-accent-small;
+  }
+}
+%common-container-inverse {
+  width: min-content;
+  padding: 25px;
+  color: $font-color;
+  border-radius: $radius-large;
+  background: $bg-color;
+  transition: all 300ms $common-timing-function;
+  box-shadow: $box-shadow-high-inverse;
+}
+
+%common-heading {
+  background-image: $accent-gradient;
+  color: $font-color;
+  font-size: 40px;
+  font-weight: 300;
+  font-style: normal;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  @include mobile {
+    font-size: 32px;
+  }
+}
+%common-subheading {
+  background-image: $accent-gradient;
+  font-size: $font-size-normal;
+  font-weight: normal;
+  font-style: normal;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  @include mobile {
+    font-size: 14px;
+  }
+}
+
+%common-heading-banner-normal {
+  color: white;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.089);
+  font-size: $font-size-large;
+  background-image: $accent-gradient;
+}
+
+%common-heading-banner-small {
+  @extend %common-heading-banner-normal;
+  font-size: $font-size-normal;
+}
+
+%common-stake-badge {
+  @extend %common-heading-banner-normal;
+  border-radius: $radius-normal;
+  padding: 10px;
+  white-space: nowrap;
+}
+
+%common-stake-badge-small {
+  @extend %common-heading-banner-small;
+  width: fit-content;
+  padding: 6px 13px;
+  border-radius: 18px;
+  text-align: center;
+  min-width: min-content;
+  white-space: nowrap;
+}
+
+%common-card-creator-banner {
+  @extend %common-heading-banner-small;
+  margin-top: $space-small;
+  margin-left: -$space-small;
+  margin-right: -$space-small;
+  margin-bottom: -$space-small;
+  border-radius: $radius-small;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  text-align: center;
+  padding: $space-tiny;
+  text-transform: uppercase;
+}
+
+%common-title {
+  text-shadow: 1px 1px 1px #ffffff;
+  font-size: 32px;
+  color: $font-color;
+  margin-bottom: $space-tiny;
+  @include mobile {
+    font-size: 22px;
+  }
+}
+%common-subtitle {
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+  font-size: $font-size-normal;
+  color: $font-color;
+  @include mobile {
+    font-size: 14px;
+  }
+}
+%common-label {
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+  font-size: $font-size-normal;
+  color: $font-color-light;
+}
+%common-text {
+  font-size: $font-size-normal;
+  color: $font-color;
+}
+%common-input {
+  @extend %common-button-secondary;
+  cursor: text;
+  box-shadow: $box-shadow-normal-inverse;
+  border: none;
+  font-size: $font-size-normal;
+  &:disabled {
+    background-color: darken($bg-color-dark, 5%);
+  }
+  &::-webkit-input-placeholder {
+    font-family: "FontAwesome";
+  }
+}
+%common-input-wrapper {
+  @extend %common-input;
+  display: flex;
+  padding-right: 0px;
+  width: 100%;
+  & > textarea,
+  input {
+    font-size: 20px;
+    background: none;
+    border: none;
+    width: 100%;
+  }
+  & > button {
+    margin-top: -10px;
+    margin-bottom: -10px;
+  }
+}
+%common-divider {
+  height: 1px;
+  box-shadow: 1px 1px 1px 0 rgba(darken($bg-color-middle, 10%), 0.84);
+  background-color: $bg-color-dark;
+}
+%common-divider-gradient {
+  height: 1px;
+  box-shadow: 1px 1px 1px 0 rgba(darken($gradient-start-color, 10%), 0.84);
+  background-color: $gradient-end-color;
+
+  @include mobile {
+    width: 1px;
+    height: 100%;
+  }
+}
+%common-input-label {
+  margin: $space-normal 0 $space-tiny $space-tiny;
+  &__tag {
+    background-image: $accent-gradient;
+    color: white;
+    padding: 3px;
+    border-radius: 10px;
+    margin-left: 5px;
+    & > i {
+      cursor: pointer;
+    }
+  }
+}
+//animations
+@mixin inline-animation($duration, $func: ease, $delay: 0ms) {
+  $name: inline-#{unique-id()};
+
+  @keyframes #{$name} {
+    @content;
+  }
+  animation-name: $name;
+  animation-duration: $duration;
+  animation-delay: $delay;
+  animation-iteration-count: 1;
+  animation-timing-function: $func;
+}
+
+%fade-in {
+  @include inline-animation(500ms) {
+    from {
+      opacity: 0;
+    }
+    to {
+      background: 1;
+    }
+  }
+}
+
+%slide-in-right {
+  @include inline-animation(500ms) {
+    from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+%slide-in-bottom {
+  @include inline-animation(500ms) {
+    from {
+      opacity: 0;
+      transform: translateY(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

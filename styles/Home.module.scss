@@ -1,15 +1,14 @@
+@import "./base.scss";
 .Home{
+  @extend %common-page;
   display: flex;
   flex-direction: column;
   align-items: center;
-  .title {
-    margin: 0;
-    line-height: 1.15;
-    font-size: 4rem;
+  .heading{
+    @extend %common-heading;
   }
-  .subtitle {
-    margin: 0;
-    line-height: 1.5;
-    font-size: 1.8rem;
+  .content{
+    @extend %common-content;
+    @extend %fade-in;
   }
 }

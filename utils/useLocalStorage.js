@@ -1,5 +1,6 @@
 import React from "react";
 
+//Utility hook that makes local storage api stateful and observable.
 export default function useLocalStorage(key, optionalCallback) {
   let initial;
   if (typeof window !== "undefined")

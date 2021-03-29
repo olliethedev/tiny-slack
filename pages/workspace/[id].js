@@ -1,10 +1,10 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
 import useNetlifyIdentity from "../../utils/useNetlifyIdentity";
 import { useEffect } from "react";
 import { executeQuery } from "../../utils/graphqlHelper";
-import { useManualQuery } from 'graphql-hooks';
+import { useManualQuery } from "graphql-hooks";
 
 const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   workspaceOne(filter: { _id: $id }) {
@@ -26,31 +26,34 @@ const WORKSPACE_JOIN_MUTATION = `mutation JoinWorkspace($name: String!, $email: 
   }
 }`;
 
-const Chat = dynamic(() => import('../../components/Chat'));
+const Chat = dynamic(() => import("../../components/Chat"));
 
 const Workspace = ({ workspace }) => {
+  const workspaceOne = workspace.data.workspaceOne;
   const router = useRouter();
   const { id } = router.query;
   const identity = useNetlifyIdentity();
   const [register, { loading, error, data: updatedWorkspace }] = useManualQuery(
-    WORKSPACE_JOIN_MUTATION,
-    {
-      variables: {
-        avatar_url:identity?.user?.user_metadata?.avatar_url,
-        name:identity?.user?.user_metadata?.full_name,
-        email:identity?.user?.email,
-        workspaceId:id,
-      },
-    }
+    WORKSPACE_JOIN_MUTATION
   );
+  //Initial render
   useEffect(() => {
     if (!identity.user) {
+      // redirect home if not loggedin
       router.push("/");
-    }else{
-      console.log(workspace.data.workspaceOne)
-      if(workspace.data.workspaceOne.users.filter(u => u.email ===identity.user.email).length===0){
-        register();
-      }
+    } else if (
+      workspaceOne.users.filter((u) => u.email === identity.user.email)
+        .length === 0
+    ) {
+      //if not registered, register
+      register({
+        variables: {
+          avatar_url: identity?.user?.user_metadata?.avatar_url,
+          name: identity?.user?.user_metadata?.full_name,
+          email: identity?.user?.email,
+          workspaceId: id,
+        },
+      });
     }
   }, []);
 
@@ -64,10 +67,10 @@ const Workspace = ({ workspace }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       Workspace id: {id}
-      Users: {workspace.data.workspaceOne.userCount}
-      {loading&& <div>Registering new user...</div>}
-      {(error||updatedWorkspace?.errors)&&<div>Failed registration...</div>}
-      {updatedWorkspace&&<div>Registered!!!</div>}
+      Users: {workspaceOne.userCount}
+      {loading && <div>Registering new user...</div>}
+      {(error || updatedWorkspace?.errors) && <div>Failed registration...</div>}
+      {updatedWorkspace && <div>Registered!!!</div>}
       {id && <Chat id={id} user={identity.user} initialWorkspace={workspace} />}
     </div>
   );
@@ -76,7 +79,7 @@ const Workspace = ({ workspace }) => {
 export default Workspace;
 
 // this function is called serverside, and client side gets the `workspaces` prop
-export async function getServerSideProps({ params}) {
+export async function getServerSideProps({ params }) {
   const { data } = await executeQuery(WORKSPACE_QUERY, { id: params.id });
   return { props: { workspace: data } };
 }

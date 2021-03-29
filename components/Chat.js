@@ -28,7 +28,6 @@ const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
     }
   );
 
-  console.log({ workspace, initialWorkspace, updatedWorkspace });
   useEffect(() => {
     if (updatedWorkspace) {
       setWorkspace(updatedWorkspace);
