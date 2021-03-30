@@ -1,9 +1,10 @@
-import { useManualQuery, useQuery } from "graphql-hooks";
-import React, { useCallback, useEffect } from "react";
+import { useManualQuery } from "graphql-hooks";
+import React, { useCallback, useEffect, useRef } from "react";
 import useInput from "../utils/useInput";
 import useNetlifyIdentity from "../utils/useNetlifyIdentity";
+import Message from "../components/Message";
 
-import styles from "../styles/Messages.module.scss"
+import styles from "../styles/Messages.module.scss";
 
 const MESSAGES_QUERY = `query FindMessages($id: MongoID!) {
   messageMany(filter: { channel: $id }) {
@@ -24,13 +25,17 @@ const NEW_MESSAGE_MUTATION = `mutation NewMessage($content: String!, $email: Str
 
 export const Messages = ({ name, channelId }) => {
   const identity = useNetlifyIdentity();
+  const messagesEndRef = useRef(null);
+
   const [messageInput, message, setMessage] = useInput({
     elementTypeTextArea: true,
   });
+
   const [
     createNewMessage,
     { loading: loadingNewMessage, error: newMessageError, data: newMessage },
   ] = useManualQuery(NEW_MESSAGE_MUTATION);
+
   const [updateMessages, { loading, error, data: messages }] = useManualQuery(
     MESSAGES_QUERY,
     {
@@ -39,8 +44,12 @@ export const Messages = ({ name, channelId }) => {
       },
     }
   );
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const handleSend = useCallback(() => {
-    alert(message);
     createNewMessage({
       variables: {
         channelId,
@@ -50,21 +59,45 @@ export const Messages = ({ name, channelId }) => {
     });
     setMessage("");
   }, [message]);
+
   useEffect(() => {
     updateMessages();
-    console.log({ messages });
   }, [newMessage, channelId]);
-  console.log({ channelId, messages });
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <div className={styles.Messages}>
-      <h3>{name} Messages</h3>
-      {loading&&<div>Loading...</div>}
-      {error&&<div>Error loading messages...</div>}
-      {messages?.data.messageMany.map((message, index) => (
-        <div key={index}>{message.content}</div>
-      ))}
-      {messageInput}
-      <button onClick={handleSend}>Send</button>
+      <h3>
+        {name} Messages
+        <button className={styles.refresh} onClick={updateMessages}>
+          <img src="/static/image_refresh.svg" alt="refresh" />
+        </button>
+      </h3>
+      <div className={styles.inner}>
+        <div className={styles.items}>
+          {loading && <div>Loading...</div>}
+          {error && <div>Error loading messages...</div>}
+          {messages?.data.messageMany.length === 0 && (
+            <img src="/static/image_empty.svg" alt="empty" />
+          )}
+          {messages?.data.messageMany.map((message, index) => (
+            <Message
+              identity={identity}
+              styles={styles}
+              message={message}
+              key={index}
+            />
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+        <div className={styles.inputWrapper}>
+          {messageInput}
+          <button onClick={handleSend}>Send</button>
+        </div>
+      </div>
     </div>
   );
 };

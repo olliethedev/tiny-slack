@@ -1,21 +1,50 @@
 @import "./base.scss";
 .Channels{
+    @include mobile {
+        width: 100%;
+    }
     &>h3{
         text-align: center;
+        text-transform: capitalize;
+        .refresh{
+            @extend %common-button-secondary;
+            display: inline-block;
+            padding: 5px 5px 4px 5px;
+            margin-left: 3px;
+            img{
+                width:14px;
+                height:auto;
+            }
+        }
     }
     .inner{
         min-width: 250px;
         @extend %common-container-inverse;
-        .item{
-            font-size: $font-size-normal;
-            &>button{
-                text-align: left;
-                width: 100%;
-                @extend %common-button-secondary;
+        max-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        @include mobile {
+            width: 100%;
+            min-width: initial;
+        }
+        .items{
+            overflow-y: scroll;
+            padding-bottom: $space-small;
+            .item{
+                font-size: $font-size-normal;
+                &>button{
+                    text-align: left;
+                    width: 100%;
+                    @extend %common-button-secondary;
+                }
+                &.selected{
+                    &>button{
+                        font-weight: bold;
+                    }
+                }
             }
         }
         .inputWrapper{
-            margin-top: $space-small;
             @extend %common-input-wrapper;
             display: flex;
             &>input{

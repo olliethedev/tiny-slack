@@ -1,4 +1,93 @@
 @import "./base.scss";
 .Messages{
-
+    &>h3{
+        text-transform: capitalize;
+        .refresh{
+            @extend %common-button-secondary;
+            display: inline-block;
+            padding: 5px 5px 4px 5px;
+            margin-left: 3px;
+            img{
+                width:14px;
+                height:auto;
+            }
+        }
+    }
+    .inner{
+        @extend %common-container-inverse;
+        padding:0;
+        width: 100%;
+        max-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        .items{
+            flex-grow: 1;
+            overflow-y: scroll;
+            padding:$space-small;
+            min-height: 48vh;
+            @include mobile {
+                min-height: 42vh;
+            }
+            &>img{
+                width: 50%;
+                height: auto;
+                margin: 0 auto;
+                display: block;
+            }
+            .item{
+                @extend %common-container;
+                min-width: 300px;
+                border-radius: $radius-tiny;
+                margin-top: $space-small;
+                border-bottom-left-radius: 0;
+                position: relative;
+                @include mobile {
+                    min-width: 80%;
+                }
+                &:after{
+                    content: "";
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    border-width: 8px;
+                    border-style: solid;
+                    border-color: $bg-color-dark transparent transparent transparent;
+                }
+                &.me{
+                    margin-left: auto;
+                    border-bottom-left-radius: $radius-tiny;
+                    border-bottom-right-radius: 0;
+                    background: rgb(213, 228, 223);
+                    &:after{
+                        left: initial;
+                        right: 0;
+                        border-color: rgb(213, 228, 223) transparent transparent transparent;
+                    }
+                }
+                .info{
+                    display:flex;
+                    justify-content: space-between;
+                    padding-bottom: $space-tiny;
+                    .name{
+                        font-weight: bold;
+                    }
+                    .time{
+                        font-weight: 200;
+                        font-size: $font-size-small;
+                    }
+                }
+            }
+        }
+        .inputWrapper{
+            height: 100px;
+            @extend %common-input-wrapper;
+            display: flex;
+            &>input{
+            font-size: $font-size-normal!important;
+            }
+            &>button{
+                @extend %common-button-accent;
+            }
+        }
+    }
 }

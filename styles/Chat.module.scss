@@ -1,5 +1,20 @@
 @import "./base.scss";
 .Chat{
+    .toggle {
+        @extend %common-container-inverse;
+        display: flex;
+        flex-direction: row;
+        padding: 5px;
+        margin-top: $space-small;
+        &>button{
+            @extend %common-button-secondary;
+            opacity: 0.55;
+        }
+        .active {
+            
+            opacity: 1;
+        }
+    }
     display:flex;
     flex-direction: column;
     .loading{
@@ -10,7 +25,7 @@
         @extend %common-button;
         margin-top: $space-small;
     }
-    .inner{
+    .columns{
         display: flex;
         flex-direction: row;
         width: 100%;
@@ -19,9 +34,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            @include mobile {
+                margin-right: 0;
+                width: 100%;
+            }
         }
         &>:nth-child(2){
             flex-grow: 1;
+            @include mobile {
+                margin-right: 0;
+                width: 100%;
+            }
         }
     }
 }

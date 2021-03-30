@@ -98,8 +98,9 @@ $common-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   min-width: 420px;
   height: 100vh;
   @include mobile {
-    padding: $space-normal $space-small 0 $space-small;
+    padding: 0 ;
     min-width: 100%;
+    height: inherit;
   }
 }
 

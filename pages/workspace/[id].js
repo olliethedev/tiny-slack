@@ -72,7 +72,7 @@ const Workspace = ({ workspace }) => {
       <div className={styles.content}>
         <NavBar styles={styles} workspaceName={workspaceOne.name} />
         <div className={styles.inner}>
-          Total Users: {workspaceOne.userCount}
+          Workspace Users: {workspaceOne.userCount}
           {loading && <div>Registering new user...</div>}
           {(error || updatedWorkspace?.errors) && (
             <div>Failed registration...</div>

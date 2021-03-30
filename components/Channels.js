@@ -10,8 +10,16 @@ const NEW_CHANNEL_MUTATION = `mutation NewChannel($name: String!, $workspace: Mo
   }
 }`;
 
-export const Channels = ({ workspaceId, channels, onSelect, onNewChannel }) => {
-  const [newChannelInput, newChannel, setNewChannel] = useInput({placeholder:"Add Channel"});
+export const Channels = ({
+  selectedIndex = 0,
+  workspaceId,
+  channels,
+  onSelect,
+  onNewChannel,
+}) => {
+  const [newChannelInput, newChannel, setNewChannel] = useInput({
+    placeholder: "Add Channel",
+  });
   const [
     createChannel,
     { loading, error, data: createdChannel },
@@ -31,13 +39,25 @@ export const Channels = ({ workspaceId, channels, onSelect, onNewChannel }) => {
   }, [newChannel]);
   return (
     <div className={styles.Channels}>
-      <h3>Channels</h3>
+      <h3>
+        Channels
+        <button className={styles.refresh} onClick={onNewChannel}>
+          <img src="/static/image_refresh.svg" alt="refresh" />
+        </button>
+      </h3>
       <div className={styles.inner}>
-        {channels.map((channel, index) => (
-          <div className={styles.item} key={index}>
-            <button onClick={() => onSelect(channel)}>{channel.name}</button>
-          </div>
-        ))}
+        <div className={styles.items}>
+          {channels.map((channel, index) => (
+            <div
+              className={
+                styles.item + " " + (selectedIndex === index && styles.selected)
+              }
+              key={index}
+            >
+              <button onClick={() => onSelect(channel)}>{channel.name}</button>
+            </div>
+          ))}
+        </div>
         <div className={styles.inputWrapper}>
           {newChannelInput}
           <button onClick={onCreateChannel}>+</button>
