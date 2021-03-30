@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "../styles/Toggle.scss";
 import { GraphQLClient, ClientContext } from "graphql-hooks";
 const client = new GraphQLClient({
   url: "/api/lightql",

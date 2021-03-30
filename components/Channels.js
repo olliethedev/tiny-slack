@@ -16,6 +16,7 @@ export const Channels = ({
   channels,
   onSelect,
   onNewChannel,
+  loadingChannels
 }) => {
   const [newChannelInput, newChannel, setNewChannel] = useInput({
     placeholder: "Add Channel",
@@ -24,9 +25,7 @@ export const Channels = ({
     createChannel,
     { loading, error, data: createdChannel },
   ] = useManualQuery(NEW_CHANNEL_MUTATION);
-  useEffect(() => {
-    onSelect(channels[0]);
-  }, []);
+  
   const onCreateChannel = useCallback(async () => {
     await createChannel({
       variables: {
@@ -58,6 +57,8 @@ export const Channels = ({
             </div>
           ))}
         </div>
+        {(loadingChannels || loading) && <div className={styles.loading}>Loading...</div>}
+        {error && <div>Error loading messages...</div>}
         <div className={styles.inputWrapper}>
           {newChannelInput}
           <button onClick={onCreateChannel}>+</button>

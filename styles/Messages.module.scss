@@ -78,6 +78,9 @@
                 }
             }
         }
+        .loading{
+            text-align: right;
+        }
         .inputWrapper{
             height: 100px;
             @extend %common-input-wrapper;

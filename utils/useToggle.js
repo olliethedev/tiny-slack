@@ -2,14 +2,14 @@ import { useState } from 'react';
 
 // Utility hook for stateful inputs and textarea elements.
 export default function useToggle(
-  {activeStyle, textPositive="On", textNegative="Off", initialValue=false}={}
+  { textPositive="On", textNegative="Off", initialValue=false}={}
 ) {
   const [value, setValue] = useState(initialValue);
   const toggle = (
-    <>
-      <button className={value?activeStyle:""} onClick={()=>setValue(true)}>{textPositive}</button>
-      <button className={!value?activeStyle:""} onClick={()=>setValue(false)}>{textNegative}</button>
-    </>
+    <div className="Toggle">
+      <button className={value?"active":""} onClick={()=>setValue(true)}>{textPositive}</button>
+      <button className={!value?"active":""} onClick={()=>setValue(false)}>{textNegative}</button>
+    </div>
   );
-  return [toggle, value];
+  return [toggle, value, setValue];
 }

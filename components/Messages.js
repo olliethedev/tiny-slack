@@ -78,8 +78,6 @@ export const Messages = ({ name, channelId }) => {
       </h3>
       <div className={styles.inner}>
         <div className={styles.items}>
-          {loading && <div>Loading...</div>}
-          {error && <div>Error loading messages...</div>}
           {messages?.data.messageMany.length === 0 && (
             <img src="/static/image_empty.svg" alt="empty" />
           )}
@@ -91,6 +89,8 @@ export const Messages = ({ name, channelId }) => {
               key={index}
             />
           ))}
+          {loading && <div className={styles.loading}>Loading...</div>}
+          {error && <div>Error loading messages...</div>}
           <div ref={messagesEndRef} />
         </div>
         <div className={styles.inputWrapper}>

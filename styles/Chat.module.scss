@@ -1,20 +1,5 @@
 @import "./base.scss";
 .Chat{
-    .toggle {
-        @extend %common-container-inverse;
-        display: flex;
-        flex-direction: row;
-        padding: 5px;
-        margin-top: $space-small;
-        &>button{
-            @extend %common-button-secondary;
-            opacity: 0.55;
-        }
-        .active {
-            
-            opacity: 1;
-        }
-    }
     display:flex;
     flex-direction: column;
     .loading{

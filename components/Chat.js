@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useManualQuery } from "graphql-hooks";
 import { useBreakpoints } from "react-breakpoints-hook";
 import useToggle from "../utils/useToggle";
@@ -22,17 +22,15 @@ const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
 const Chat = ({ id, user, initialWorkspace }) => {
   const [workspace, setWorkspace] = useState(initialWorkspace);
   const [channel, setChannel] = useState();
-
   let { xs } =
     process.browser &&
     useBreakpoints({
       xs: { min: 0, max: 420 },
     });
 
-  const [toggle, toggleSelected] = useToggle({
+  const [toggle, toggleSelected, setToggleSelected] = useToggle({
     textPositive: "Messages",
     textNegative: "Channels",
-    activeStyle:styles.active
   });
   const [update, { loading, error, data: updatedWorkspace }] = useManualQuery(
     WORKSPACE_QUERY,
@@ -49,22 +47,34 @@ const Chat = ({ id, user, initialWorkspace }) => {
       setChannel(updatedWorkspace.data.channelMany[0]);
     }
   }, [updatedWorkspace]);
+
+  const onSelect = useCallback(
+    (ch) => {
+      if (channel !== ch) {
+        setChannel(ch);
+        setToggleSelected(ch);
+      }
+    },
+    [channel]
+  );
   return (
     <div className={styles.Chat}>
+      <div>{xs && toggle}</div>
       {workspace && (
         <>
-          {xs && <div className={styles.toggle}> {toggle} </div>}
           <div className={styles.columns}>
-          {(!toggleSelected || !xs) && <div>
+            {(!toggleSelected || !xs) && (
+              <div>
                 <Channels
+                  loadingChannels={loading}
                   selectedIndex={workspace.data.channelMany.indexOf(channel)}
                   workspaceId={workspace.data.workspaceOne._id}
                   channels={workspace.data.channelMany}
-                  onSelect={setChannel}
+                  onSelect={onSelect}
                   onNewChannel={update}
                 />
-              
-            </div>}
+              </div>
+            )}
             {channel && (toggleSelected || !xs) && (
               <Messages name={channel.name} channelId={channel._id} />
             )}

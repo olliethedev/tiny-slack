@@ -20,6 +20,7 @@
     .inner{
         min-width: 250px;
         @extend %common-container-inverse;
+        padding:0;
         max-height: 60vh;
         display: flex;
         flex-direction: column;
@@ -29,7 +30,7 @@
         }
         .items{
             overflow-y: scroll;
-            padding-bottom: $space-small;
+            padding: 0 $space-small $space-small $space-small;
             .item{
                 font-size: $font-size-normal;
                 &>button{
@@ -43,6 +44,9 @@
                     }
                 }
             }
+        }
+        .loading{
+            text-align: center;
         }
         .inputWrapper{
             @extend %common-input-wrapper;
