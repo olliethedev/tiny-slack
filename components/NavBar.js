@@ -1,31 +1,28 @@
 import { useRouter } from "next/router";
 import useNetlifyIdentity from "../utils/useNetlifyIdentity";
 
-export const NavBar = () => {
+const NavBar = ({styles, workspaceName}) => {
   const identity = useNetlifyIdentity();
   const router = useRouter();
   return (
-    <div>
+    <div className={styles.nav}>
       {identity.user ? (
-        <div>
-          You are logged in!
-          {identity.user && (
-            <>Welcome {identity.user?.user_metadata.full_name}!</>
-          )}
-          <br />
+        <div className={styles.items}>
+            <div className={styles.username}> {identity.user?.user_metadata.full_name}</div>
+            <div className={styles.workspaceName}>{workspaceName}</div>
           <button
             onClick={() => {
               identity.doLogout();
               router.push("/");
             }}
           >
-            {" "}
-            Log out here.
+            Logout
           </button>
         </div>
       ) : (
-        <button onClick={identity.doLogin}>Log in here.</button>
+        <button onClick={identity.doLogin}>Login</button>
       )}
     </div>
   );
 };
+export default NavBar;

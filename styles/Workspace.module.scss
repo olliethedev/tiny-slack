@@ -1,0 +1,40 @@
+@import "./base.scss";
+.Workspace{
+  @extend %common-page;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .content{
+    @extend %common-content;
+    @extend %common-container;
+    @extend %fade-in;
+    @extend %slide-in-bottom;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    .nav{
+      @extend %common-accent-container;
+      padding: $space-small;
+      .items{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .workspaceName{
+          font-size: $font-size-large;
+        }
+        .username{
+          font-size: $font-size-normal;
+        }
+        &>button{
+          @extend %common-button-secondary;
+          font-size: $font-size-normal;
+          font-weight: bold;
+          color: #fff;
+        }
+      }
+    }
+    .inner{
+      margin: $space-normal
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@import "./base.scss";
+.Channels{
+    &>h3{
+        text-align: center;
+    }
+    .inner{
+        min-width: 250px;
+        @extend %common-container-inverse;
+        .item{
+            font-size: $font-size-normal;
+            &>button{
+                text-align: left;
+                width: 100%;
+                @extend %common-button-secondary;
+            }
+        }
+        .inputWrapper{
+            margin-top: $space-small;
+            @extend %common-input-wrapper;
+            display: flex;
+            &>input{
+            font-size: $font-size-normal!important;
+            }
+            &>button{
+                @extend %common-button-accent;
+            }
+        }
+    }
+}

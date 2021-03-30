@@ -6,6 +6,9 @@ import { useEffect } from "react";
 import { executeQuery } from "../../utils/graphqlHelper";
 import { useManualQuery } from "graphql-hooks";
 
+import styles from "../../styles/Workspace.module.scss";
+import NavBar from "../../components/NavBar";
+
 const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   workspaceOne(filter: { _id: $id }) {
     _id
@@ -61,17 +64,25 @@ const Workspace = ({ workspace }) => {
     return <div>No id specified...</div>;
   }
   return (
-    <div>
+    <div className={styles.Workspace}>
       <Head>
         <title>Tiny-Slack | Workspace</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      Workspace id: {id}
-      Users: {workspaceOne.userCount}
-      {loading && <div>Registering new user...</div>}
-      {(error || updatedWorkspace?.errors) && <div>Failed registration...</div>}
-      {updatedWorkspace && <div>Registered!!!</div>}
-      {id && <Chat id={id} user={identity.user} initialWorkspace={workspace} />}
+      <div className={styles.content}>
+        <NavBar styles={styles} workspaceName={workspaceOne.name} />
+        <div className={styles.inner}>
+          Total Users: {workspaceOne.userCount}
+          {loading && <div>Registering new user...</div>}
+          {(error || updatedWorkspace?.errors) && (
+            <div>Failed registration...</div>
+          )}
+          {updatedWorkspace && <div>Registered!!!</div>}
+          {id && (
+            <Chat id={id} user={identity.user} initialWorkspace={workspace} />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -19,5 +19,10 @@
     &>button{
         @extend %common-button-accent;
         margin-bottom: $space-normal;
+        min-width: 160px;
+        text-align: center;
+        display: block;
+        text-transform: uppercase;
+        font-size: $font-size-normal;
     }
 }

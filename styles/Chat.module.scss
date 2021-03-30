@@ -1,0 +1,27 @@
+@import "./base.scss";
+.Chat{
+    display:flex;
+    flex-direction: column;
+    .loading{
+        height: 38px;
+    }
+    &>button{
+        width:min-content;
+        @extend %common-button;
+        margin-top: $space-small;
+    }
+    .inner{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        &>:nth-child(1){
+            margin-right: $space-normal;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        &>:nth-child(2){
+            flex-grow: 1;
+        }
+    }
+}

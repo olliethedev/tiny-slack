@@ -3,6 +3,8 @@ import React, { useCallback, useEffect } from "react";
 import useInput from "../utils/useInput";
 import useNetlifyIdentity from "../utils/useNetlifyIdentity";
 
+import styles from "../styles/Messages.module.scss"
+
 const MESSAGES_QUERY = `query FindMessages($id: MongoID!) {
   messageMany(filter: { channel: $id }) {
     _id
@@ -54,7 +56,7 @@ export const Messages = ({ name, channelId }) => {
   }, [newMessage, channelId]);
   console.log({ channelId, messages });
   return (
-    <div>
+    <div className={styles.Messages}>
       <h3>{name} Messages</h3>
       {loading&&<div>Loading...</div>}
       {error&&<div>Error loading messages...</div>}

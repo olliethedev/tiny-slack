@@ -2,6 +2,8 @@ import { useManualQuery } from "graphql-hooks";
 import React, { useCallback, useEffect } from "react";
 import useInput from "../utils/useInput";
 
+import styles from "../styles/Channels.module.scss";
+
 const NEW_CHANNEL_MUTATION = `mutation NewChannel($name: String!, $workspace: MongoID!){
   channelCreateOne(record: {name:$name, workspace:$workspace}){
     record{name workspace _id}
@@ -9,7 +11,7 @@ const NEW_CHANNEL_MUTATION = `mutation NewChannel($name: String!, $workspace: Mo
 }`;
 
 export const Channels = ({ workspaceId, channels, onSelect, onNewChannel }) => {
-  const [newChannelInput, newChannel, setNewChannel] = useInput();
+  const [newChannelInput, newChannel, setNewChannel] = useInput({placeholder:"Add Channel"});
   const [
     createChannel,
     { loading, error, data: createdChannel },
@@ -28,15 +30,19 @@ export const Channels = ({ workspaceId, channels, onSelect, onNewChannel }) => {
     onNewChannel();
   }, [newChannel]);
   return (
-    <div>
+    <div className={styles.Channels}>
       <h3>Channels</h3>
-      {channels.map((channel, index) => (
-        <div key={index}>
-          <button onClick={() => onSelect(channel)}>{channel.name}</button>
+      <div className={styles.inner}>
+        {channels.map((channel, index) => (
+          <div className={styles.item} key={index}>
+            <button onClick={() => onSelect(channel)}>{channel.name}</button>
+          </div>
+        ))}
+        <div className={styles.inputWrapper}>
+          {newChannelInput}
+          <button onClick={onCreateChannel}>+</button>
         </div>
-      ))}
-      {newChannelInput}
-      <button onClick={onCreateChannel}>Add</button>
+      </div>
     </div>
   );
 };

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { NavBar } from "./NavBar";
 import { useManualQuery } from "graphql-hooks";
 import { Channels } from "./Channels";
 import { Messages } from "./Messages";
+
+import styles from "./../styles/Chat.module.scss";
 
 const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   workspaceOne(filter: { _id: $id }) {
@@ -16,7 +17,7 @@ const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   }
 }`;
 
- const Chat = ({ id, user, initialWorkspace }) => {
+const Chat = ({ id, user, initialWorkspace }) => {
   const [workspace, setWorkspace] = useState(initialWorkspace);
   const [channel, setChannel] = useState();
   const [update, { loading, error, data: updatedWorkspace }] = useManualQuery(
@@ -35,24 +36,24 @@ const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
     }
   }, [updatedWorkspace]);
   return (
-    <div>
-      <span>{user?.user_metadata?.full_name ?? user?.email}</span>
-      
+    <div className={styles.Chat}>
       {workspace && (
-        <div>
-          <NavBar />
-          <button onClick={update}>Refresh channels</button>
-          {loading && <div>Loading latest</div>}
-          <div style={{ display: "flex" }}>
-            <Channels
-              workspaceId={workspace.data.workspaceOne._id}
-              channels={workspace.data.channelMany}
-              onSelect={setChannel}
-              onNewChannel={update}
-            />
-            {channel && <Messages name={channel.name} channelId={channel._id} />}
+        <>
+          <button disabled={loading} onClick={update}>{loading?"Loading latest...":"Refresh channels"}</button>
+          <div className={styles.inner}>
+            <div>
+              <Channels
+                workspaceId={workspace.data.workspaceOne._id}
+                channels={workspace.data.channelMany}
+                onSelect={setChannel}
+                onNewChannel={update}
+              />
+            </div>
+            {channel && (
+              <Messages name={channel.name} channelId={channel._id} />
+            )}
           </div>
-        </div>
+        </>
       )}
       {error && <div>Got refreshing error: {JSON.stringify(error)}</div>}
     </div>
