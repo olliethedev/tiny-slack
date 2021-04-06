@@ -1,4 +1,4 @@
-The purpose of this porject is to showcase the utility of the following tools/frameworks: NextJS, ReactJS, GraphQL, MongoDB, Netlify Functions (serverless), Netlify Identity (auth). You can test out the deployed project [here](https://tiny-slack.netlify.app/).
+The purpose of this porject is to showcase the utility of the following tools/frameworks: NextJS, ReactJS, GraphQL, MongoDB, Netlify Functions (serverless), Netlify Identity (auth). You can test out the deployed project [here](https://tiny-slack.olliecodes.com/).
 
 ![preview](./readme_assets/preview.png)
 

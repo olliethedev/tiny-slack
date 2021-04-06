@@ -5,6 +5,7 @@ import useNetlifyIdentity from "../utils/useNetlifyIdentity";
 import Message from "../components/Message";
 
 import styles from "../styles/Messages.module.scss";
+import { useChannel, useEvent } from '@harelpls/use-pusher';
 
 const MESSAGES_QUERY = `query FindMessages($id: MongoID!) {
   messageMany(filter: { channel: $id }) {
@@ -45,6 +46,11 @@ export const Messages = ({ name, channelId }) => {
     }
   );
 
+  const channel = useChannel(channelId);
+    useEvent(channel, "message", ({ data }) =>
+      updateMessages()
+  );
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -62,7 +68,7 @@ export const Messages = ({ name, channelId }) => {
 
   useEffect(() => {
     updateMessages();
-  }, [newMessage, channelId]);
+  }, [channelId]);
 
   useEffect(() => {
     scrollToBottom();

@@ -8,6 +8,16 @@ import { useManualQuery } from "graphql-hooks";
 
 import styles from "../../styles/Workspace.module.scss";
 import NavBar from "../../components/NavBar";
+import { PusherProvider } from "@harelpls/use-pusher";
+
+const config = {
+  clientKey: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
+  cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER,
+};
+
+console.log(config);
+
+console.log(process.env)
 
 const WORKSPACE_QUERY = `query FindWorkspace($id: MongoID!) {
   workspaceOne(filter: { _id: $id }) {
@@ -64,26 +74,28 @@ const Workspace = ({ workspace }) => {
     return <div>No id specified...</div>;
   }
   return (
-    <div className={styles.Workspace}>
-      <Head>
-        <title>Tiny-Slack | Workspace</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className={styles.content}>
-        <NavBar styles={styles} workspaceName={workspaceOne.name} />
-        <div className={styles.inner}>
-          Workspace Users: {workspaceOne.userCount}
-          {loading && <div>Registering new user...</div>}
-          {(error || updatedWorkspace?.errors) && (
-            <div>Failed registration...</div>
-          )}
-          {updatedWorkspace && <div>Registered!!!</div>}
-          {id && (
-            <Chat id={id} user={identity.user} initialWorkspace={workspace} />
-          )}
+    <PusherProvider {...config}>
+      <div className={styles.Workspace}>
+        <Head>
+          <title>Tiny-Slack | Workspace</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className={styles.content}>
+          <NavBar styles={styles} workspaceName={workspaceOne.name} />
+          <div className={styles.inner}>
+            Workspace Users: {workspaceOne.userCount}
+            {loading && <div>Registering new user...</div>}
+            {(error || updatedWorkspace?.errors) && (
+              <div>Failed registration...</div>
+            )}
+            {updatedWorkspace && <div>Registered!!!</div>}
+            {id && (
+              <Chat id={id} user={identity.user} initialWorkspace={workspace} />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </PusherProvider>
   );
 };
 

@@ -1,5 +1,14 @@
 import { composeMongoose } from "graphql-compose-mongoose";
 import { SchemaComposer } from "graphql-compose";
+const Pusher = require("pusher");
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID,
+  key: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
+  secret: process.env.PUSHER_APP_SECRET,
+  cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER,
+  useTLS: true
+});
+
 
 let schema;// cached schema for local dev convinience. not really needed in production.
 
@@ -81,9 +90,12 @@ const getSchema = async () => {
         email: "String!",
       },
       resolve: async (source, args, context, info) =>
-        manualAdminAuth(context, args.email).then(() =>
-          Message.createWithUserEmail(args.channelId, args.content, args.email)
-        ),
+        manualAdminAuth(context, args.email).then(() =>{
+          pusher.trigger(args.channelId, "message", {
+            message: args.content
+          });
+          return Message.createWithUserEmail(args.channelId, args.content, args.email)
+        }),
     };
 
     //Set GraphQL Queries from mongoose
